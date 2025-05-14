@@ -60,21 +60,33 @@ const Header = function () {
   const style = {};
 
   return (
-    <header className="header">
+    <header className="header ">
       <h1 style={style}>Fast React Pizza Co.</h1>;
     </header>
   );
 };
 const Menu = function () {
+  const numPizzas = pizzaData.length;
+
   return (
     <div className="menu">
       <h2>Our Menu</h2>
 
-      <ul className="pizzas">
-        {pizzaData.map((data, id) => (
-          <Pizza pizzaObj={data} key={data.name} />
-        ))}
-      </ul>
+      {numPizzas > 0 ? (
+        <>
+          <p>
+            Authentic Italian cuisine & creative dishes to choose from. All from
+            our stone oven, all organic, all delicious
+          </p>
+          <ul className="pizzas">
+            {pizzaData.map((data, id) => (
+              <Pizza pizzaObj={data} key={data.name} />
+            ))}
+          </ul>
+        </>
+      ) : (
+        <p>We are still working on our menu</p>
+      )}
     </div>
   );
 };
@@ -82,14 +94,14 @@ const Menu = function () {
 function Pizza({ pizzaObj }) {
   // console.log(pizzaObj);
 
-  if (pizzaObj.soldOut) return null;
+  // if (pizzaObj.soldOut) return null;
   return (
-    <div className="pizza">
+    <div className={`pizza ${pizzaObj.soldOut ? "sold-out" : null}`}>
       <img src={pizzaObj.photoName} alt={pizzaObj.name} />
       <div>
         <h3> {pizzaObj.name} </h3>
         <p>{pizzaObj.ingredients}</p>
-        <span>${pizzaObj.price}</span>
+        <span>{pizzaObj.soldOut ? "SOLD OUT" : "$" + pizzaObj.price}</span>
       </div>
     </div>
   );
