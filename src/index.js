@@ -69,35 +69,34 @@ const Menu = function () {
   return (
     <div className="menu">
       <h2>Our Menu</h2>
-      {pizzaData.map((data, id) => (
-        <Pizza
-          key={id}
-          name={data.name}
-          ingredients={data.ingredients}
-          photoName={data.photoName}
-          price={data.price}
-        />
-      ))}
+
+      <ul className="pizzas">
+        {pizzaData.map((data, id) => (
+          <Pizza pizzaObj={data} key={data.name} />
+        ))}
+      </ul>
     </div>
   );
 };
 
-function Pizza(props) {
-  // console.log(props);
+function Pizza({ pizzaObj }) {
+  // console.log(pizzaObj);
+
+  if (pizzaObj.soldOut) return null;
   return (
     <div className="pizza">
-      <img src={props.photoName} alt="Pizza Spinaci" />
+      <img src={pizzaObj.photoName} alt={pizzaObj.name} />
       <div>
-        <h3> {props.name} </h3>
-        <p>{props.ingredients}</p>
-        <span>${props.price}</span>
+        <h3> {pizzaObj.name} </h3>
+        <p>{pizzaObj.ingredients}</p>
+        <span>${pizzaObj.price}</span>
       </div>
     </div>
   );
 }
 const Footer = function () {
   const hour = new Date().getHours();
-  const openHour = 12;
+  const openHour = 10;
   const closeHour = 22;
 
   const isOpen = hour >= openHour && hour <= closeHour;
@@ -109,10 +108,41 @@ const Footer = function () {
 
   return (
     <footer className="footer">
-      {new Date().toLocaleTimeString()}
-      {isOpen ? ` We're currently open!` : ` We're currently closed`}
+      {/* {new Date().toLocaleTimeString()} */}
+      {isOpen ? (
+        <Order closeHour={closeHour} />
+      ) : (
+        <p>
+          We are still working on our menu. Please come back at {openHour}:00.
+        </p>
+      )}
     </footer>
   );
+
+  function Order({ closeHour }) {
+    return (
+      <div className="order">
+        <p>
+          We're currently open! until {closeHour}:00. Come visit us or order
+        </p>
+        <button className="btn">ORDER NOW</button>
+      </div>
+    );
+  }
+
+  // return (
+  //   <footer className="footer">
+  //     {isOpen && (
+  //       <div className="order">
+  //         <p>
+  //           {/* {new Date().toLocaleTimeString()} */}
+  //           We're currently open! until {closeHour}:00. Come visit us or order
+  //         </p>
+  //         <button className="btn">ORDER NOW</button>
+  //       </div>
+  //     )}
+  //   </footer>
+  // );
 
   // React.createElement("footer", null, `We're currenttly open!`);
 };
